@@ -1,3 +1,4 @@
+#! /usr/bin/env node
 const pupter = require('puppeteer-core');
 async function run() {
   const browser = await pupter.launch({
@@ -8,8 +9,11 @@ async function run() {
   })
   const page = await browser.newPage();//打开浏览器页面
   const startTime = performance.now();//记录开始时间
-  await page.goto('http://127.0.0.1:8080/'); //打开网页
-  await page.waitForSelector('.panel-test');//等待页面加载完成
+  await page.goto(process.argv[2] || 'http://127.0.0.1:8080/'); //打开网页
+  // await page.waitForSelector('.panel-test');//等待页面加载完成
+  let onClick = await page.$('.panel-test');//无需等待，直接获取元素
+  onClick.click();//模拟点击元素
+  // await page.waitForNavigation();//等待页面跳转完成
   console.log(performance.now() - startTime);//打印时间差
 
   // let timing = JSON.parse(await page.evaluate(() => { return JSON.stringify(window.performance.timing) }));//获取页面加载时间 
